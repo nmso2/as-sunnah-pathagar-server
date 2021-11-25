@@ -95,7 +95,6 @@ async function run() {
             const query = { email: email };
             const user = await usersCollection.findOne(query);
             let isAdmin = false;
-            console.log(user);
             if (user?.role === 'admin') {
                 isAdmin = true;
             }
