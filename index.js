@@ -109,6 +109,13 @@ async function run() {
             res.json(result);
         });
 
+        // GET API to Get all requestedBook
+        app.get('/requestedBook', async (req, res) => {
+            const cursor = requestedBookCollection.find({});
+            const requestedBook = await cursor.toArray();
+            res.send(requestedBook.reverse());
+        });
+
         // GET API (Get requestedBook for single user with query)
         app.get('/requestedBook', async (req, res) => {
             const email = req.query.email;
@@ -118,7 +125,7 @@ async function run() {
             res.send(requestedBook);
         });
 
-        // DELETE API
+        // DELETE API for cancel request
         app.delete('/requestedBook/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
