@@ -125,13 +125,29 @@ async function run() {
             res.send(requestedBook);
         });
 
+
+        // UPDATE API
+        app.put('/requestedBook/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedRequest = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: updatedRequest.status
+                },
+            };
+            const result = await requestedBookCollection.updateOne(filter, updateDoc, options)
+            res.json(result);
+        })
+
         // DELETE API for cancel request
         app.delete('/requestedBook/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await requestedBookCollection.deleteOne(query);
             res.json(result);
-        })
+        });
 
     }
     finally {
