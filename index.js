@@ -23,6 +23,7 @@ async function run() {
         const database = client.db("asSunnahPathagar");
         const booksCollection = database.collection("books");
         const usersCollection = database.collection("users");
+        const requestedBookCollection = database.collection("requestedBook");
 
         // POST API to add books
         app.post('/books', async (req, res) => {
@@ -99,6 +100,22 @@ async function run() {
                 isAdmin = true;
             }
             res.json({ admin: isAdmin });
+        });
+
+        // POST API to add requestedBook
+        app.post('/requestedBook', async (req, res) => {
+            const requestedBook = req.body;
+            const result = await requestedBookCollection.insertOne(requestedBook);
+            res.json(result);
+        });
+
+        // GET API (Get requestedBook for single user with query)
+        app.get('/requestedBook', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = requestedBookCollection.find(query);
+            const requestedBook = await cursor.toArray();
+            res.send(requestedBook);
         });
 
     }
