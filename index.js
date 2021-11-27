@@ -99,6 +99,15 @@ async function run() {
             res.send(books.reverse());
         });
 
+        // GET API (Get a single user with query)
+        app.get('/users', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = usersCollection.find(query);
+            const user = await cursor.toArray();
+            res.send(user);
+        });
+
         //Get API for admin check...
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
