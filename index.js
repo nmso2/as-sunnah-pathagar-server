@@ -75,15 +75,6 @@ async function run() {
             res.send(books.reverse());
         });
 
-        // GET API (Get books for single user with query)
-        app.get('/books', async (req, res) => {
-            const email = req.query.email;
-            const query = { email: email };
-            const cursor = booksCollection.find(query);
-            const books = await cursor.toArray();
-            res.send(books);
-        });
-
         //Get api to get book with id
         app.get('/books/:id', async (req, res) => {
             const id = req.params.id;
@@ -121,7 +112,7 @@ async function run() {
         });
 
         // GET API to Get all requestedBook
-        app.get('/requestedBook', async (req, res) => {
+        app.get('/requestedBooks', async (req, res) => {
             const cursor = requestedBookCollection.find({});
             const requestedBook = await cursor.toArray();
             res.send(requestedBook.reverse());
@@ -130,6 +121,7 @@ async function run() {
         // GET API (Get requestedBook for single user with query)
         app.get('/requestedBook', async (req, res) => {
             const email = req.query.email;
+            console.log(email);
             const query = { email: email };
             const cursor = requestedBookCollection.find(query);
             const requestedBook = await cursor.toArray();
