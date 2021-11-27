@@ -25,6 +25,8 @@ async function run() {
         const usersCollection = database.collection("users");
         const requestedBookCollection = database.collection("requestedBook");
 
+        //-------------------------------------------------------
+
         // POST API to add books
         app.post('/books', async (req, res) => {
             const name = req.body.name;
@@ -48,15 +50,6 @@ async function run() {
             res.json(result);
         });
 
-
-        // GET API (Get all books)
-        app.get('/books', async (req, res) => {
-            const cursor = booksCollection.find({});
-            const books = await cursor.toArray();
-            res.send(books.reverse());
-        });
-
-
         // POST API to add users
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -64,13 +57,22 @@ async function run() {
             res.json(result);
         });
 
-        // PUT API to make admin
-        app.put('/users/admin', async (req, res) => {
-            const user = req.body;
-            const filter = { email: user.email };
-            const updateDoc = { $set: { role: 'admin' } };
-            const result = await usersCollection.updateOne(filter, updateDoc);
+        // POST API to add requestedBook
+        app.post('/requestedBook', async (req, res) => {
+            const requestedBook = req.body;
+            const result = await requestedBookCollection.insertOne(requestedBook);
             res.json(result);
+        });
+
+
+        //-------------------------------------------------------
+
+
+        // GET API (Get all books)
+        app.get('/books', async (req, res) => {
+            const cursor = booksCollection.find({});
+            const books = await cursor.toArray();
+            res.send(books.reverse());
         });
 
         // GET API (Get books for single user with query)
@@ -90,6 +92,13 @@ async function run() {
             res.json(result);
         });
 
+        // GET API (Get all users)
+        app.get('/users', async (req, res) => {
+            const cursor = usersCollection.find({});
+            const books = await cursor.toArray();
+            res.send(books.reverse());
+        });
+
         //Get API for admin check...
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
@@ -100,13 +109,6 @@ async function run() {
                 isAdmin = true;
             }
             res.json({ admin: isAdmin });
-        });
-
-        // POST API to add requestedBook
-        app.post('/requestedBook', async (req, res) => {
-            const requestedBook = req.body;
-            const result = await requestedBookCollection.insertOne(requestedBook);
-            res.json(result);
         });
 
         // GET API to Get all requestedBook
@@ -126,6 +128,18 @@ async function run() {
         });
 
 
+        //-------------------------------------------------------
+
+
+        // PUT API to make admin
+        app.put('/users/admin', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email };
+            const updateDoc = { $set: { role: 'admin' } };
+            const result = await usersCollection.updateOne(filter, updateDoc);
+            res.json(result);
+        });
+
         // UPDATE API
         app.put('/requestedBook/:id', async (req, res) => {
             const id = req.params.id;
@@ -139,7 +153,10 @@ async function run() {
             };
             const result = await requestedBookCollection.updateOne(filter, updateDoc, options)
             res.json(result);
-        })
+        });
+
+
+        //-------------------------------------------------------
 
         // DELETE API for cancel request
         app.delete('/requestedBook/:id', async (req, res) => {
