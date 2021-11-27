@@ -91,7 +91,7 @@ async function run() {
         });
 
         // GET API (Get a single user with query)
-        app.get('/users', async (req, res) => {
+        app.get('/user', async (req, res) => {
             const email = req.query.email;
             const query = { email: email };
             const cursor = usersCollection.find(query);
