@@ -23,7 +23,8 @@ async function run() {
         const database = client.db("asSunnahPathagar");
         const booksCollection = database.collection("books");
         const usersCollection = database.collection("users");
-        const requestedBookCollection = database.collection("requestedBook");
+        const requestedBookCollection = database.collection("requestedBooks");
+        const reviewCollection = database.collection("reviews");
 
         //-------------------------------------------------------
 
@@ -58,9 +59,16 @@ async function run() {
         });
 
         // POST API to add requestedBook
-        app.post('/requestedBook', async (req, res) => {
+        app.post('/requestedBooks', async (req, res) => {
             const requestedBook = req.body;
             const result = await requestedBookCollection.insertOne(requestedBook);
+            res.json(result);
+        });
+
+        // POST API to add review
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
             res.json(result);
         });
 
@@ -126,6 +134,13 @@ async function run() {
             const cursor = requestedBookCollection.find(query);
             const requestedBook = await cursor.toArray();
             res.send(requestedBook);
+        });
+
+        // GET API (Get all reviews)
+        app.get('/reviews', async (req, res) => {
+            const cursor = reviewCollection.find({});
+            const review = await cursor.toArray();
+            res.send(review);
         });
 
 
