@@ -133,14 +133,14 @@ async function run() {
             const query = { email: email };
             const cursor = requestedBookCollection.find(query);
             const requestedBook = await cursor.toArray();
-            res.send(requestedBook);
+            res.send(requestedBook.reverse());
         });
 
         // GET API (Get all reviews)
         app.get('/reviews', async (req, res) => {
             const cursor = reviewCollection.find({});
             const review = await cursor.toArray();
-            res.send(review);
+            res.send(review.reverse());
         });
 
 
