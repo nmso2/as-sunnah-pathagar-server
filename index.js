@@ -164,7 +164,9 @@ async function run() {
             const options = { upsert: true };
             const updateDoc = {
                 $set: {
-                    status: updatedRequest.status
+                    status: updatedRequest.status,
+                    returnDate: updatedRequest.returnDate,
+                    returnTime: updatedRequest.returnTime,
                 },
             };
             const result = await requestedBookCollection.updateOne(filter, updateDoc, options)
