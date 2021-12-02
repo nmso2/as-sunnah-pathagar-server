@@ -98,7 +98,7 @@ async function run() {
         // GET API (Get 4 New books)
         app.get('/newBooks', async (req, res) => {
             const cursor = booksCollection.find({}).sort({ _id: -1 });
-            const newBooks = await cursor.limit(4).toArray();
+            const newBooks = await (await cursor.limit(4).toArray()).reverse();
             res.send(newBooks.reverse());
         });
 
