@@ -78,9 +78,28 @@ async function run() {
 
         // GET API (Get all books)
         app.get('/books', async (req, res) => {
-            const cursor = booksCollection.find({});
-            const books = await cursor.toArray();
-            res.send(books.reverse());
+            const cursor = booksCollection.find({}).sort({ _id: -1 });
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+            const count = await cursor.count();
+            let books;
+            if (page) {
+                books = await cursor.skip((page - 1) * size).limit(size).toArray();
+            }
+            else {
+                books = await cursor.toArray();
+            }
+            res.send({
+                count,
+                books
+            });
+        });
+
+        // GET API (Get 4 New books)
+        app.get('/newBooks', async (req, res) => {
+            const cursor = booksCollection.find({}).sort({ _id: -1 });
+            const newBooks = await cursor.limit(4).toArray();
+            res.send(newBooks.reverse());
         });
 
         //Get api to get book with id
